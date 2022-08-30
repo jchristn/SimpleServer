@@ -24,6 +24,7 @@ namespace SimpleServer
         static async Task DefaultRequest(HttpContext ctx)
         {
             Console.WriteLine(SerializeJson(ctx.Request, true));
+            if (!String.IsNullOrEmpty(ctx.Request.DataAsString)) Console.WriteLine(ctx.Request.DataAsString);
             ctx.Response.ContentType = "application/json";
             await ctx.Response.Send(SerializeJson(ctx.Request, true));
         }
