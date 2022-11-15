@@ -1,7 +1,7 @@
 ﻿using System;
+using System.Text.Json;
 using System.Threading.Tasks;
 using WatsonWebserver;
-using Newtonsoft.Json;
 
 namespace SimpleServer
 {
@@ -32,26 +32,14 @@ namespace SimpleServer
         static string SerializeJson(object obj, bool pretty)
         {
             if (obj == null) return null;
-            string json;
-            if (pretty)
+            if (!pretty)
             {
-                json = JsonConvert.SerializeObject(obj, Newtonsoft.Json.Formatting.Indented,
-                  new JsonSerializerSettings
-                  {
-                      NullValueHandling = NullValueHandling.Ignore,
-                      DateTimeZoneHandling = DateTimeZoneHandling.Utc,
-                  });
+                return JsonSerializer.Serialize(obj);
             }
             else
             {
-                json = JsonConvert.SerializeObject(obj,
-                  new JsonSerializerSettings
-                  {
-                      NullValueHandling = NullValueHandling.Ignore,
-                      DateTimeZoneHandling = DateTimeZoneHandling.Utc
-                  });
+                return JsonSerializer.Serialize(obj, new JsonSerializerOptions { WriteIndented = true });
             }
-            return json;
         }
     }
 }
