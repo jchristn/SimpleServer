@@ -7,6 +7,10 @@ namespace SimpleServer
 {
     class Program
     {
+        static bool _DisplayRequest = false;
+        static bool _DisplayPayload = false;
+        static bool _DisplaySummary = true;
+        static bool _PrettyJson = false;
         static string _Hostname = "localhost";
         static int _Port = 8888;
         static bool _Ssl = false;
@@ -23,10 +27,28 @@ namespace SimpleServer
 
         static async Task DefaultRequest(HttpContext ctx)
         {
-            Console.WriteLine(SerializeJson(ctx.Request, true));
-            if (!String.IsNullOrEmpty(ctx.Request.DataAsString)) Console.WriteLine(ctx.Request.DataAsString);
+            if (_DisplayRequest)
+            {
+                Console.WriteLine(SerializeJson(ctx.Request, _PrettyJson));
+                if (_DisplayPayload && !String.IsNullOrEmpty(ctx.Request.DataAsString))
+                {
+                    Console.WriteLine(ctx.Request.DataAsString);
+                }
+            }
+
             ctx.Response.ContentType = "application/json";
             await ctx.Response.Send(SerializeJson(ctx.Request, true));
+
+            if (_DisplaySummary)
+            {
+                ctx.Timestamp.End = DateTime.UtcNow;
+
+                Console.WriteLine(
+                    ctx.Request.Source.IpAddress + ":" + ctx.Request.Source.Port + " " +
+                    ctx.Request.Method.ToString() + " " + ctx.Request.Url.RawWithQuery + " " +
+                    ctx.Request.ContentLength + " bytes " +
+                    "(" + ctx.Timestamp.TotalMs + "ms)");
+            }
         }
 
         static string SerializeJson(object obj, bool pretty)

@@ -1,6 +1,6 @@
 # SimpleServer
 
-A simple HTTP server using Watson (https://github.com/jchristn/watsonwebserver) that displays requests on the console and returns the serialized request to the caller.  Supports both .NET Core and .NET Framework.
+A simple HTTP server using Watson (https://github.com/dotnet/watsonwebserver) that displays requests on the console and returns the serialized request to the caller.  Supports both .NET Core and .NET Framework.
 
 ## Use Cases
 
@@ -12,9 +12,10 @@ It's easy.  Clone, build, and run.  SimpleServer listens on port 8888 (no SSL) b
 
 ```
 git clone https://github.com/jchristn/simpleserver.git
-dotnet build -f netcoreapp2.2
-cd bin/debug/netcoreapp2.2
-dotnet SimpleServer.dll
+dotnet build
+cd bin/debug/net7.0
+SimpleServer.exe           // windows
+dotnet SimpleServer.dll    // others
 ```
 
 Then, just make calls against it using your favorite browser or REST client (POSTman, cURL, etc).
